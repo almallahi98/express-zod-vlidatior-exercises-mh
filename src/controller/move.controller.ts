@@ -4,7 +4,7 @@ import {Response,Request,NextFunction}from 'express';
 import { prisma } from '../config/db';
 import { getMoveByGenreParams, getMoveByNameParams, getMoveByRatingParams, moveIdParams, moveSchema, moveSchemaTypes} from '../zod_schema/move_rating.scheama';
 
-const getMoves= async(
+export const getMoves= async(
     req:Request,
     res:Response,
     next:NextFunction,
@@ -21,7 +21,7 @@ const getMoves= async(
     }
 }
 
-const addNEwMove= async(req:Request,res:Response,next:NextFunction)=>{
+export const addNEwMove= async(req:Request,res:Response,next:NextFunction)=>{
     try{
         const Move=req.body as moveSchemaTypes;
         await prisma.movie.create({data:Move});
@@ -32,7 +32,7 @@ const addNEwMove= async(req:Request,res:Response,next:NextFunction)=>{
     }
 }
 
-const updateMove= async (req:Request,res:Response,next:NextFunction)=>{
+export const updateMove= async (req:Request,res:Response,next:NextFunction)=>{
     try{
         const newMove= req.body as Movie;
         const {id} = req.params as moveIdParams;
@@ -47,7 +47,7 @@ const updateMove= async (req:Request,res:Response,next:NextFunction)=>{
     }
 }
 
-const deleteMobe=async(req:Request,res:Response,next:NextFunction)=>{
+export const deleteMove=async(req:Request,res:Response,next:NextFunction)=>{
     try{
         const {id} = req.params as moveIdParams;
         await prisma.movie.delete({
@@ -63,9 +63,9 @@ const deleteMobe=async(req:Request,res:Response,next:NextFunction)=>{
     }
 }
 
-const getMoveByName= async(res:Response,req:Request,next:NextFunction)=>{
+export const getMoveByName= async(res:Response,req:Request )=>{
     try{
-        const moveReq =req.body as getMoveByNameParams;
+        const moveReq =req.params as getMoveByNameParams;
         const move= await prisma.movie.findFirst({
             where:{name:moveReq.name}
         })
@@ -78,7 +78,7 @@ const getMoveByName= async(res:Response,req:Request,next:NextFunction)=>{
     }
 }
 
-const getAllMovesWithGenre= async(res:Response,req:Request,next:NextFunction)=>{
+export const getAllMovesWithGenre= async(res:Response,req:Request)=>{
     try{
         const {genre}= req.params as getMoveByGenreParams;
         //const d=genre as string;
@@ -91,7 +91,7 @@ const getAllMovesWithGenre= async(res:Response,req:Request,next:NextFunction)=>{
     }
 }
 
-const getAllMoveWithRating= async(res:Response,req:Request,next:NextFunction)=>{
+export const getAllMoveWithRating= async(res:Response,req:Request)=>{
     try{
         const {rating}=req.params as unknown as getMoveByRatingParams;
         const MoveList= await prisma.movie.findMany({
