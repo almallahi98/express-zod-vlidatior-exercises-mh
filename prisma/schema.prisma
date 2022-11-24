@@ -14,8 +14,16 @@ datasource db {
 model Movie {
   id String @id @default(uuid())
   name String @unique
-  rating Int 
+  genre Genre @default(Drama)
+  rating Int @default(1) 
   duration Int
   createdat DateTime
-  
+
 }
+enum Genre {
+  Drama
+  Action
+  Comedy
+}
+
+

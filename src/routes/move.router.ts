@@ -19,7 +19,7 @@ router.put('/:id',(req,res,next)=>{
     const updateMove=req.body as moveSchemaTypes;
     const id =req.params.id;
     const newMoveArr= Moves.filter(elm=>{
-        return elm.id !== id; 
+        //return elm.id !== id; 
     });
     newMoveArr.push(updateMove);
     Moves=newMoveArr;
@@ -29,7 +29,7 @@ router.put('/:id',(req,res,next)=>{
 router.delete('/:id',(req,res,next)=>{
     const id=req.params.id;
     const newArr= Moves.filter(elm=>{
-        return elm.id !== id;
+        //return elm.id !== id;
     })
     Moves=newArr;
     return res.status(201).json({msg:"deleted"})
