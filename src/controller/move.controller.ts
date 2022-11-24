@@ -1,8 +1,8 @@
-import {Movie} from '@prisma/client';
+import {Genre, Movie} from '@prisma/client';
 import {PrismaClientKnownRequestError} from '@prisma/client/runtime';
 import {Response,Request,NextFunction}from 'express'; 
 import { prisma } from '../config/db';
-import { getMoveByGenreParams, getMoveByNameParams, moveIdParams, moveSchema, moveSchemaTypes} from '../zod_schema/move_rating.scheama';
+import { getMoveByGenreParams, getMoveByNameParams, getMoveByRatingParams, moveIdParams, moveSchema, moveSchemaTypes} from '../zod_schema/move_rating.scheama';
 
 const getMoves= async(
     req:Request,
@@ -80,13 +80,27 @@ const getMoveByName= async(res:Response,req:Request,next:NextFunction)=>{
 
 const getAllMovesWithGenre= async(res:Response,req:Request,next:NextFunction)=>{
     try{
-        const reqParams= req.params as getMoveByGenreParams;
-        const moveList=await prisma.movie.findMany({
-        where:{genre: reqParams.genre},
-    })
+        const {genre}= req.params as getMoveByGenreParams;
+        //const d=genre as string;
+        const moveList=await prisma.movie.findMany({where:{genre: genre as Genre}})
     return res.status(200).json(moveList);
     }
     catch(err){
+        console.log(err);
+        return res.status(400).json(err);
+    }
+}
 
+const getAllMoveWithRating= async(res:Response,req:Request,next:NextFunction)=>{
+    try{
+        const {rating}=req.params as unknown as getMoveByRatingParams;
+        const MoveList= await prisma.movie.findMany({
+            where:{rating:{gt:rating}}
+        })
+        return res.status(200).json(MoveList);
+    }
+    catch(err){
+        console.log(err);
+        return res.status(400).json(err);
     }
 }

@@ -23,7 +23,13 @@ export const getMoveByName=z.object({
 })
 export const getMoveByGenre=z.object({
     params:z.object({
-        genre:z.enum(['Drama','Action','Comedy'],{required_error:'genre is required'}),
+        genre:z.string({required_error:"oooo"}),
+    })
+})
+
+export const getMoveByRating=z.object({
+    params:z.object({
+        rating:z.number({required_error:"rating is required"}).min(1,'rating min is 1').max(5,'rating max is 5'),
     })
 })
 
@@ -31,3 +37,4 @@ export type moveSchemaTypes=TypeOf <typeof moveSchema>['body'];
 export type moveIdParams=TypeOf<typeof moveSelectById>['params'];
 export type getMoveByNameParams=TypeOf <typeof getMoveByName>['params'];
 export type getMoveByGenreParams=TypeOf<typeof getMoveByGenre> ['params'];
+export type getMoveByRatingParams=TypeOf<typeof getMoveByRating>['params'];
