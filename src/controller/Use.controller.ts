@@ -5,7 +5,9 @@ import {
     DateSchemaType,
     joningDateSchemaType,
     loginSchemaType,
-    user,
+
+    UpdatByPassIdSchemaType,
+
     userByAgeType,
     userByEmail,
     userByRoleType,
@@ -15,7 +17,7 @@ import {
 export const getAllUsers = async (
     res: Response,
     req: Request,
-    next: NextFunction
+
 ) => {
     try {
         const Users = await prisma.user.findMany();
@@ -29,7 +31,6 @@ export const getAllUsers = async (
 export const addNewUser = async (
     res: Response,
     req: Request,
-    next: NextFunction
 ) => {
     try {
         const NewUser = req.body as User;
@@ -43,7 +44,6 @@ export const addNewUser = async (
 export const getUserById = async (
     res: Response,
     req: Request,
-    next: NextFunction
 ) => {
     try {
         const { id } = req.params as userId;
@@ -58,7 +58,6 @@ export const getUserById = async (
 export const getUserByEmail = async (
     res: Response,
     req: Request,
-    next: NextFunction
 ) => {
     try {
         const { email } = req.params as userByEmail;
@@ -71,11 +70,10 @@ export const getUserByEmail = async (
 };
 export const getUserByAgeOlder = async (
     res: Response,
-    req: Request,
-    next: NextFunction
+    req: Request
 ) => {
     try {
-        const age = Number(req.params.age);
+        const { age } = req.params as unknown as userByAgeType;
         const userList = await prisma.user.findMany({
             where: { age: { gt: age } },
         });
@@ -89,7 +87,6 @@ export const getUserByAgeOlder = async (
 export const getUserByRole = async (
     res: Response,
     req: Request,
-    next: NextFunction
 ) => {
     try {
         const { role } = req.params as userByRoleType;
@@ -106,8 +103,7 @@ export const getUserByRole = async (
 };
 export const useLogin = async (
     res: Response,
-    req: Request,
-    next: NextFunction
+    req: Request
 ) => {
     try {
         const { username, password } = req.body as loginSchemaType;
@@ -131,11 +127,10 @@ export const useLogin = async (
 export const updateUserPassword = async (
     res: Response,
     req: Request,
-    next: NextFunction
 ) => {
     try {
-        const id = req.params.id;
-        const password = req.body;
+
+        const { password, id } = req.body as UpdatByPassIdSchemaType;
         const user = await prisma.user.update({
             where: { id: id },
             data: { password: password },
@@ -144,39 +139,35 @@ export const updateUserPassword = async (
     } catch (err) { }
 };
 
-export const getUserByJoinDate= async (
+export const getUserByJoinDate = async (
     res: Response,
-    req: Request,
-    next: NextFunction
-) =>{
-    try{
+    req: Request) => {
+    try {
         //const id=req.params as userId;
-        const {joiningYear,id}=req.body as DateSchemaType;
-        const user= await prisma.user.findFirst({where:{
-            id:id,
-            joiningYear:joiningYear,
-        }})
+        const { joiningYear, id } = req.body as DateSchemaType;
+        const user = await prisma.user.findFirst({
+            where: {
+                id: id,
+                joiningYear: joiningYear,
+            }
+        })
         return res.status(200).json(user);
-    }catch(err)
-    {
+    } catch (err) {
         console.log(err);
         return res.status(400).json(err)
-        
+
     }
 }
 
-export const getAllUsersByJoiningDate=async (
+export const getAllUsersByJoiningDate = async (
     res: Response,
-    req: Request,
-    next: NextFunction
-) =>{
-    try{
-        const {joiningYear}= req.body as joningDateSchemaType;
-    const Users=await prisma.user.findMany({where:{joiningYear:{gte:joiningYear}}})
-    return res.status(200).json(Users);
+    req: Request) => {
+    try {
+        const { joiningYear } = req.body as joningDateSchemaType;
+        const Users = await prisma.user.findMany({ where: { joiningYear: { gte: joiningYear } } })
+        return res.status(200).json(Users);
     }
-    catch(err)
-    {
+    catch (err) {
         console.log(err);
         return res.status(400).json(err)
     }
