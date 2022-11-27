@@ -1,5 +1,4 @@
 import {Genre, Movie} from '@prisma/client';
-import {PrismaClientKnownRequestError} from '@prisma/client/runtime';
 import {Response,Request,NextFunction}from 'express'; 
 import { prisma } from '../config/db';
 import { getMoveByGenreParams, getMoveByNameParams, getMoveByRatingParams, moveIdParams, moveSchema, moveSchemaTypes} from '../zod_schema/move_rating.scheama';

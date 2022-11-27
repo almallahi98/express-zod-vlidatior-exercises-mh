@@ -20,10 +20,23 @@ model Movie {
   createdat DateTime
 
 }
+model User{
+  id String @id @default(uuid())
+  username String
+  password Int
+  email String @unique
+  role Role
+  joiningYear String
+  age Int
+  }
+
 enum Genre {
   Drama
   Action
   Comedy
 }
 
-
+enum Role{
+  admin
+  user
+}
